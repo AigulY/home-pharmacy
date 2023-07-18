@@ -1,0 +1,139 @@
+<%- include('../partials/head', { errors, info }); %>
+<%- include('../partials/navbar'); %>
+<style>
+  body {
+    background-color: #dee2df;
+    color: #2a3e40;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+  }
+
+  .content-wrapper {
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 800px;
+    background-color: #2c3e3c;
+    padding: 2rem;
+    border-radius: 50px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .medication-title {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .form-control {
+    padding: 1.2rem;
+    border-radius: 50px;
+    border: none;
+    margin-bottom: 0.4rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto; 
+  }
+
+  .form-select-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.2rem;
+    max-width: 665px;
+  }
+
+  .form-select-type {
+    flex: 1;
+    margin-right: 0.5rem;
+    margin-left: 4.4rem;
+    border-radius: 50px;
+    height: 65px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .form-select-status {
+    flex: 1;
+    margin-left: 0.5rem;
+    border-radius: 50px;
+    height: 65px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn-primary,
+  .btn-back {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    height: 46px;
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+    margin-bottom: 1rem;
+    display: inline-block; 
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    margin-top: 2.4rem;
+    margin-right: 0.5rem; 
+    margin-left: 7rem;
+  }
+
+  .btn-back {
+    margin-top: 2.4rem;
+    background-color: #8bcdc4;
+  }
+</style>
+
+<div class="container">
+  <div class="content-wrapper">
+    <h1 class="medication-title"><%= medication_values.title %></h1>
+    <form action="<%= medication_values.action %>" method="POST">
+      <div class="mb-3">
+        <input name="brandName" id="brandName" type="text" class="form-control" placeholder="Medication Name" value="<%= medication_values.brandName %>"/>
+      </div>
+      <div class="mb-3">
+        <input name="producer" id="producer" type="text" class="form-control" placeholder="Medication Manufacturer" value="<%= medication_values.producer %>"/>
+      </div>
+      <div class="mb-3">
+        <input name="expirationDate" id="expirationDate" type="text" class="form-control" placeholder="Expiration date in MM/DD/YYYY format" pattern="\d{2}\/\d{2}\/\d{4}" value="<%= medication_values.expirationDate %>"/>
+      </div>
+      <div class="mb-3">
+        <input name="opened" id="opened" type="text" class="form-control" placeholder="Opened date in MM/DD/YYYY format" pattern="\d{2}\/\d{2}\/\d{4}" value="<%= medication_values.opened %>"/>
+      </div>
+      <div class="mb-3 form-select-wrapper">
+        <select name="productType" id="productType" class="form-select-type">
+          <% productType_values.forEach((type) => { %>
+            <option value="<%= type %>"%> <% if (type === medication_values.productType )  { %>selected<% } %>><%= type %></option>
+          <% }) %>
+        </select>
+        <select name="status" id="status" class="form-select-status">
+          <% status_values.forEach((stat_name) => { %>
+            <option value="<%= stat_name %>" %>
+              <% if (stat_name === medication_values.status ) { %>selected<% } %>><%= stat_name %> </option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="mb-3">
+        <textarea name="notes" id="notes" placeholder="Notes" class="form-control"><%= medication_values.notes %></textarea>
+      </div>
+      <div class="mb-3">
+        <button type="submit" class="btn btn-primary"><%= medication_values.submit %></button>
+          <a href="/medications" class="btn btn-back">Back</a>
+        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+      </div>
+    </form>
+  </div>
+</div>
+<%- include("../partials/foot") %>

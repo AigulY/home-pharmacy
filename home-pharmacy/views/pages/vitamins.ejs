@@ -1,0 +1,235 @@
+<%- include('../partials/head', { errors, info }); %>
+<%- include('../partials/navbar'); %>
+<style>
+  .container {
+  max-width: 960px;
+  margin: 80px auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #cbd0d0;
+  font-weight: 700;
+  color: #333;
+}
+
+.table td {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f2f2f2;
+}
+
+.vitamin-name {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.vitamin-name button {
+  background: none;
+  border: none;
+  color: #cbd0d0;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.details-row {
+  display: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  color: #cbd0d0;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 120px;
+  min-height: 50px;
+  z-index: 1;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 4px 8px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: #cbd0d0;
+  border-radius: 4px;
+}
+
+.alert {
+  margin-bottom: 1rem;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.add-vitamin-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.add-vitamin-button button {
+  background-color: #8bcdc4;
+  border: none;
+  border-radius: 5%;
+  color: white;
+  width: 240px;
+  height: 40px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(163, 162, 162, 0.2);
+}
+
+</style>
+
+<div class="container">
+  <div class="add-vitamin-button">
+    <button type="button" class="btn-add-vitamin" title="Add Vitamin">+</button>
+  </div>
+
+  <% if (vitamins.length === 0) { %>
+    <h2 style="text-align: center;">There are no vitamins to display.</h2>
+  <% } else { %>
+    <table id="vitamins-table" class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Vitamin Name</th>
+          <th scope="col">Notes</th>
+          <th scope="col">is Featured</th>
+          <th colspan="2" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% vitamins.forEach((vitamin) => { %>
+          <tr>
+            <td class="vitamin-name">
+              <a class="dropdown-item" data-id="<%= vitamin._id %>">
+                <%= vitamin.brandName %>
+              </a>
+            </td>
+            <td><%= vitamin.notes %></td>
+            <td><%= vitamin.isFeatured %></td>
+            <td><a class="btn btn-primary" href="/vitamins/edit/<%= vitamin._id %>">edit</a></td>
+            <td><button type="button" class="deleteButton btn btn-primary" data-id="<%= vitamin._id %>">delete</button></td>
+          </tr>
+          <tr class="details-row" id="details<%= vitamin._id %>">
+            <td colspan="2">
+              <div class="card">
+                <div class="card-body">
+                  <p>Notes: <%= vitamin.notes %></p>
+                  <p>Is Featured: <%= vitamin.isFeatured %></p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const vitaminNames = document.querySelectorAll(".vitamin-name");
+    vitaminNames.forEach((name) => {
+      name.addEventListener("click", () => {
+        const detailsRow = name.parentElement.nextElementSibling;
+        detailsRow.classList.toggle("details-row");
+      });
+    });
+
+    const table = document.getElementById("vitamins-table");
+    table.addEventListener("click", async (event) => {
+      if (event.target.classList.contains("deleteButton")) {
+        const vitamin_id = event.target.dataset.id;
+        event.preventDefault();
+        try {
+          response = await fetch(`/vitamins/delete/${vitamin_id}`, { method: "DELETE" });
+          window.location = response.url;
+        } catch {
+          const body = document.getElementById("body");
+          const alert_html = "<div class=\"alert alert-danger\" role=\"alert\">A communications error occurred.</div>";
+          const temp_div = document.createElement("div");
+          temp_div.innerHTML = alert_html;
+          const alerts = document.getElementsByClassName("alert");
+          Array.prototype.forEach.call(alerts, (alert) => {
+            body.removeChild(alert);
+          });
+          const new_alert = document.createElement("div");
+          new_alert.innerHTML = alert_html;
+          body.prepend(temp_div.firstChild);
+        }
+      }
+    });
+  });
+      document.addEventListener("DOMContentLoaded", () => {
+    const addVitaminButton = document.querySelector(".btn-add-vitamin");
+    addVitaminButton.addEventListener("click", async () => {
+      try {
+        const response = await fetch("/vitamins/add", { method: "POST" });
+        window.location.href = response.url;
+      } catch (error) {
+        const body = document.getElementById("body");
+        const alertHtml = `<div class="alert alert-danger" role="alert">An error occurred: ${error.message}</div>`;
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = alertHtml;
+        const alerts = document.getElementsByClassName("alert");
+        Array.prototype.forEach.call(alerts, (alert) => {
+          body.removeChild(alert);
+        });
+        const newAlert = document.createElement("div");
+        newAlert.innerHTML = alertHtml;
+        body.prepend(newAlert.firstChild);
+      };
+    });
+  });
+</script>
+
+<%- include("../partials/foot") %>

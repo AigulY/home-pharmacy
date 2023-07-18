@@ -1,0 +1,121 @@
+<%- include("../partials/head", {errors, info}) %>
+
+<title>Home Pharmacy - Login</title>
+<style>
+  body {
+    background-color: #dee2df;
+    color: #dee2df;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+  }
+
+  .login-title {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .content-wrapper {
+    width: 70%;
+    max-width: 700px;
+    background-color: #2c3e3c;
+    padding: 5rem;
+    border-radius: 50px;
+    box-shadow: 0 0 20px rgba(38, 69, 69, 0.3);
+    text-align: center;
+  }
+
+  .form-group {
+    margin-bottom: -0.7rem;
+  }
+
+  .form-group label {
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 0.2rem;
+  }
+
+  .form-group input {
+    padding: 1.9rem;
+    border: none;
+    height: 50px;
+    width: 100%;
+    border-radius: 50px;
+  }
+
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    align-self: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50px;
+    border: none;
+    height: 45px;
+    width: 250px;
+    margin-top: 4rem;
+    display: inline-block;
+  }
+
+  .btn-back {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    color: #007bff;
+    font-size: 1.2rem;
+    background-color: #8bcdc4;
+    cursor: pointer;
+    margin-top: 4rem;
+    height: 45px;
+    width: 250px;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .txt2 {
+    font-size: 1.2rem;
+    color: #dee2df;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .txt2 a {
+    color: #007bff;
+    text-decoration: none;
+  }
+</style>
+
+<div class="container">
+  <div class="content-wrapper">
+    <h1 class="login-title">Member Login</h1>
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="username"></label>
+        <input name="username" id="username" type="text" placeholder="Email" class="form-control" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label for="password"></label>
+        <input name="password" id="password" type="password" placeholder="Password" class="form-control"/>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <a href="/" class="btn btn-back">Back</a>
+      </div>
+      <input type="hidden" name="_csrf" value="<%= _csrf %>">
+    </form>
+    <div class="txt2">
+      <p>New User? <a href="/register">Register here</a></p> 
+    </div>
+  </div>
+</div>
+
+<%- include("../partials/foot") %>

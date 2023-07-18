@@ -1,0 +1,109 @@
+<%- include("../partials/head", {errors, info}) %>
+
+<style>
+  body {
+    background-color: #dee2df;
+    color: #2a3e40;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    max-width: 1000px;
+    background-color: #2c3e3c;
+    padding: 3rem;
+    border-radius: 50px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    color: white;
+  }
+
+  .register-title {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .form-control {
+    padding: 1.2rem;
+    border-radius: 50px;
+    border: none;
+    margin-bottom: -1.7rem;
+    width: 100%;
+    background-color: white;
+    width: 600px;
+  }
+
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    cursor: pointer;
+    margin-top: 2.4rem;
+    height: 46px;
+    width: 300px;
+    text-align: center;
+    margin-bottom: 1rem;
+    margin-top: 4.5rem;
+  }
+
+  .btn-back {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.2rem;
+    background-color: #8bcdc4;
+    cursor: pointer;
+    height: 46px;
+    width: 300px;
+    text-align: center;
+    margin-bottom: 1rem;
+    margin-top: 4.5rem;
+  }
+</style>
+
+<div class="container">
+  <div class="content-wrapper">
+    <h1 class="register-title">Register</h1>
+    <form action="/register" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label"></label>
+        <input name="name" id="name" type="text" class="form-control" placeholder="Full Name" value="<%= user_values.name %>"/>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label"></label>
+        <input name="email" id="email" type="text" class="form-control" placeholder="Your Email" value="<%= user_values.email %>"/>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label"></label>
+        <input name="password" id="password" type="password" placeholder="Password" class="form-control"/>
+      </div>
+      <div class="mb-3">
+        <label for="password-confirm" class="form-label"></label>
+        <input name="password_confirm" id="password-confirm" type="password" placeholder="Confirm password" class="form-control"/>
+      </div>
+      <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a href="/" class="btn btn-primary">Back</a>
+      </div>
+      <input type="hidden" name="_csrf" value="<%= _csrf %>">
+    </form>
+  </div>
+</div>
+
+<%- include("../partials/foot") %>

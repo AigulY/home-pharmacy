@@ -1,0 +1,19 @@
+const express = require("express");
+
+const {
+    vitamins,
+    add_vitamin,
+    new_vitamin,
+    edit_vitamin,
+    update_vitamin,
+    delete_vitamin,
+} = require('../controllers/vitaminsController');
+
+const router = express.Router();
+router.route("/").get(vitamins);
+router.route("/add").get(new_vitamin).post(add_vitamin);
+router.route("/edit/:vitamin").get(edit_vitamin);
+router.route("/update/:vitamin").post(update_vitamin);
+router.route("/delete/:vitamin").delete(delete_vitamin);
+
+module.exports = router;  
